@@ -6,7 +6,7 @@ import productsRoutes from './handlers/products'
 import bodyParser from 'body-parser'
 
 const app: express.Application = express()
-const address: string = "0.0.0.0:3000"
+const address: string = "127.0.0.1:3000"
 
 app.use(bodyParser.json())
 
@@ -20,6 +20,8 @@ productsRoutes(app)
 app.listen(3000, function () {
     console.log(`starting app on: ${address}`)
 })
+
+
 
 
 

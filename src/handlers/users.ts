@@ -3,8 +3,7 @@ import {User,Users} from "../models/users"
 import jwt from "jsonwebtoken"
 
 const store = new Users()
-
-const verifyAuthToken = (req: Request, res: Response, next) => {
+const verifyAuthToken = (req: Request, res: Response) => {
     try {
         const authorizationHeader = req.headers.authorization
         //@ts-ignore
@@ -12,21 +11,13 @@ const verifyAuthToken = (req: Request, res: Response, next) => {
         //@ts-ignore
         const decoded = jwt.verify(token, process.env.TOKEN_SECRET)
 
-        next()
     } catch (error) {
         res.status(401)
     }
 }
 
 const index = (req: Request, res: Response) => {
-    //Authentication with JWT
-    try {
-        //@ts-ignore
-        jwt.verify(req.body.token, process.env.TOKEN_SECRET)
-    } catch (error){
-        res.status(401)
-        res.json(`Invalid Token ${error}`)
-    }
+
     const users = store.index()
     res.json(users)
 }
@@ -53,24 +44,23 @@ const show = (req: Request, res: Response) => {
 const create = async(req: Request, res: Response) => {
     const user:User = {
         id: req.body.id, 
-        firstName: req.body.firstName, 
-        lastName: req.body.lastName,
-        pw: req.body.password,
+        firstname: req.body.firstname, 
+        lastname: req.body.lastname,
+        pw: req.body.pw,
     }
     try {
         const newUser = await store.create(user)
-        //@ts-ignore
-        var token = jwt.sign({user: newUser}, process.env.TOKEN_SECRET)
-        res.json(token)
+        res.json(newUser) 
     } catch (error) {
-        throw new Error(`${error}: Creating a product did not work.`)
+        res.status(400)
+        res.json(error)
     }
 }
 
 const usersRoutes = (app: express.Application) => {
-    app.get("/users", verifyAuthToken,index)
-    app.get("/users/:id", verifyAuthToken,show)
-    app.post("/users", verifyAuthToken, create)
+    app.get("/users", index)
+    app.get("/users/:id", show)
+    app.post("/users", create)
 }
 
 export default usersRoutes

@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken"
 
 const store = new Products()
 
-const verifyAuthToken = (req: Request, res: Response, next) => {
+const verifyAuthToken = (req: Request, res: Response) => {
     try {
         const authorizationHeader = req.headers.authorization
         //@ts-ignore
@@ -12,7 +12,6 @@ const verifyAuthToken = (req: Request, res: Response, next) => {
         //@ts-ignore
         const decoded = jwt.verify(token, process.env.TOKEN_SECRET)
 
-        next()
     } catch (error) {
         res.status(401)
     }
@@ -30,7 +29,19 @@ const show = async(req: Request, res: Response) => {
 
 const create = async(req: Request, res: Response) => {
     try {
-        const product = {
+        const authorizationHeader = req.headers.authorization
+        //@ts-ignore
+        const token = authorizationHeader.split(' ')[1]
+        //@ts-ignore
+        jwt.verify(token, process.env.TOKEN_SECRET)    
+    } catch (error) {
+        res.status(401)
+        res.json(error+'Access denied, invalid token')
+        return
+    }
+    
+    try {
+        const product: Product = {
             id: req.body.id, 
             name: req.body.name, 
             price: req.body.price,
@@ -41,7 +52,8 @@ const create = async(req: Request, res: Response) => {
         res.json(newProduct)
 
     } catch (error) {
-        throw new Error(`Error: ${error}Creating a product did not work.`)
+        res.status(400)
+        res.json(error)
     }
 }
 

@@ -5,8 +5,8 @@ import bcrypt from 'bcrypt'
 
 export type User = {
     id: number, 
-    firstName: string, 
-    lastName: string, 
+    firstname: string, 
+    lastname: string, 
     pw: string,
 }
 
@@ -14,16 +14,23 @@ export class Users {
     async index(): Promise <User[]> {
         try {
             //@ts-ignore
-            const conn = client.connect()
-            const sql = 'SHOW * FROM users'
+            const conn = await client.connect()
+            .then(() => console.log("Connection successful"))
+            // @ts-ignore
+            .catch((error) => console.log("Connection failed: ", error))
 
-            const result = conn.query(sql)
+            const sql = 'SHOW * FROM users'
+            
+            console.log(conn)
+
+            const result = await conn.query(sql)
 
             conn.release()
 
             return result.rows
 
         } catch (error) {
+            console.log("Could not get users.")
             throw new Error(`Could not get users. Error: ${error}`)
         }
     }
@@ -32,7 +39,10 @@ export class Users {
         try {
             const sql = 'SHOW * FROM users WHERE id=($1)'
             //@ts-ignore
-            const conn = client.connect()
+            const conn = await client.connect()
+            .then(() => console.log("Connection successful"))
+            // @ts-ignore
+            .catch((error) => console.log("Connection failed: ", error))
             
             const result = await conn.query(sql, [id])
 
@@ -41,24 +51,30 @@ export class Users {
             return result.rows[0]
 
         } catch (error) {
+            console.log("Could not get user.")
             throw new Error(`Could not get user. Error: ${error}`)
-
         }
     }
 
     async create(u: User): Promise<User> {
         try {
-             const sql = 'INSERT INTO USERS (id, firstName, lastName, password_digest) VALUES ($1, $2, $3, $4) RETURNING *'
+            const sql = 'INSERT INTO users (id, firstname, lastname, pw) VALUES ($1, $2, $3, $4) RETURNING *'
             // @ts-ignore
-             const conn = await client.connect()
+            const conn = await client.connect()
+            .then(() => console.log("Connection successful"))
+            // @ts-ignore
+            .catch((error) => console.log("Connection failed: ", error))
 
-             const hash = bcrypt.hashSync(
-                u.pw + pepper, 
-                parseInt(saltRounds)
-             );
-  
-            const result = await conn.query(sql, [u.id, u.firstName, u.lastName, hash])
-  
+            console.log(u,conn)
+            
+          /* const salt = await bcrypt.genSalt();
+            const hash = await bcrypt.hash(u.pw, salt); */
+
+            const values = [u.id, u.firstname, u.lastname, u.pw]
+
+            const result = await conn.query(sql, values)
+
+            console.log(result)
             const user:User = result.rows[0]
   
             conn.release()
@@ -69,7 +85,8 @@ export class Users {
         }
     }
 
-    async authenticate(username: string, password: string): Promise <User | null> {
+
+    /* async authenticate(username: string, password: string): Promise <User | null> {
         //@ts-ignore
         const conn = client.connect()
 
@@ -83,11 +100,11 @@ export class Users {
 
             console.log(user)
 
-            if (bcrypt.compareSync(password+pepper, user.password_digest)) {
+            if (await bcrypt.compare(password, user.password_digest)) {
                 return user
               }
         }
 
         return null
-    }
+    } */
 }

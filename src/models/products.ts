@@ -1,5 +1,5 @@
 //@ts-ignore
-import Client from '../database'
+import client from '../database'
 
 export type Product = {
     id: number, 
@@ -13,7 +13,7 @@ export class Products {
     async index(): Promise<Product[]> {
         try {
             //@ts-ignore
-            const conn = await Client.connect()
+            const conn = await client.connect()
             const sql = 'SELECT FROM* products'
 
             const result = conn.query(sql)
@@ -30,7 +30,7 @@ export class Products {
         try {
             const sql = `SELECT * FROM products WHERE id=($1)`
             //@ts-ignore
-            const conn = Client.connect()
+            const conn = client.connect()
             
             const result = conn.query(sql,[id])
 
@@ -46,7 +46,7 @@ export class Products {
         try {
              const sql = 'INSERT INTO products (id, name, price, category) VALUES ($1, $2, $3, $4) RETURNING *'
             // @ts-ignore
-             const conn = await Client.connect()
+             const conn = await client.connect()
   
             const result = await conn.query(sql, [p.id, p.name, p.price, p.category])
   
