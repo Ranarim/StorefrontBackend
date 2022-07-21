@@ -1,27 +1,24 @@
 import dotenv from "dotenv"
-import {Client} from "pg"
+import {Pool} from "pg"
 
 dotenv.config()
 
-let client
+const {
+    POSTGRES_HOST,
+    POSTGRES_DB,
+    POSTGRES_DB_TEST,
+    POSTGRES_USER,
+    POSTGRES_PASSWORD,
+    ENV,
+  } = process.env
 
-if(process.env.ENV === 'test') {
-    client = new Client ({
-        host: process.env.POSTGRES_HOST,
-        database: process.env.POSTGRES_DB,
-        user: process.env.POSTGRES_USER,
-        password: process.env.POSTGRES_PASSWORD,
-    })
-}
+  const pool = new Pool({
+    host: POSTGRES_HOST,
+    database: ENV === 'dev' ? POSTGRES_DB : POSTGRES_DB_TEST,
+    user: POSTGRES_USER,
+    password: POSTGRES_PASSWORD,
+    port: 5432,
+  })
 
-if (process.env.ENV === 'dev') {
-    client = new Client ({
-        host: process.env.POSTGRES_HOST,
-        database: process.env.POSTGRES_DB,
-        user: process.env.POSTGRES_USER,
-        password: process.env.POSTGRES_PASSWORD,
-    })
-}
-
-export default client 
+export default pool 
 

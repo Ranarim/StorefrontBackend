@@ -16,51 +16,17 @@ const verifyAuthToken = (req: Request, res: Response) => {
     }
 }
 
-const index = (req: Request, res: Response) => {
-
-    const users = store.index()
-    res.json(users)
-}
-
-const show = (req: Request, res: Response) => {
-    //Authentication with JWT
+const index = async(req: Request, res: Response): Promise<void> => {
     try {
-        const authorizationHeader = req.headers.authorization
-        //@ts-ignore
-        const token = authorizationHeader.split(' ')[1]
-        //@ts-ignore
-        jwt.verify(token, process.env.TOKEN_SECRET)
-    } catch(err) {
-        res.status(401)
-        res.json('Access denied, invalid token')
-        return
-    }
-
-
-    const user = store.show(req.body.id)
-    res.json(user)
-}
-
-const create = async(req: Request, res: Response) => {
-    const user:User = {
-        id: req.body.id, 
-        firstname: req.body.firstname, 
-        lastname: req.body.lastname,
-        pw: req.body.pw,
-    }
-    try {
-        const newUser = await store.create(user)
-        res.json(newUser) 
-    } catch (error) {
-        res.status(400)
-        res.json(error)
-    }
+		const users = await store.index()
+		res.status(200).json(users)
+	} catch (err) {
+		res.status(401).json(`Could not get users - ${err}`)
+	}
 }
 
 const usersRoutes = (app: express.Application) => {
     app.get("/users", index)
-    app.get("/users/:id", show)
-    app.post("/users", create)
 }
 
 export default usersRoutes

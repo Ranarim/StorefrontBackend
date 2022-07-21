@@ -1,5 +1,5 @@
 //@ts-ignore
-import client from '../database'
+import pool from '../database'
 
 export type Product = {
     id: number, 
@@ -32,7 +32,7 @@ export class Products {
             //@ts-ignore
             const conn = client.connect()
             
-            const result = conn.query(sql,[id])
+            const result = await conn.query(sql,[id])
 
             conn.release()
 

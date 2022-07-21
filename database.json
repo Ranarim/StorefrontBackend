@@ -1,9 +1,18 @@
 {
     "dev": {
         "driver": "pg",
-        "host": "127.0.0.1",
-        "user": "johannesmaier",
-        "password": "geheim",
-        "database": "storefront"
+        "host": {"ENV": "POSTGRES_HOST"},
+        "user": {"ENV": "POSTGRES_USER"},
+        "password": {"ENV": "POSTGRES_PASSWORD"},
+        "database": {"ENV": "POSTGRES_DB"},
+        "port": {"ENV": "POSTGRES_PORT"}
+    },
+    "test": {
+        "driver": "pg",
+        "host": {"ENV": "POSTGRES_HOST"},
+        "user": {"ENV": "POSTGRES_USER"},
+        "password": {"ENV": "POSTGRES_PASSWORD"},
+        "database": {"ENV": "POSTGRES_DB_TEST"},
+        "port": {"ENV": "POSTGRES_PORT"}
     }
 }
