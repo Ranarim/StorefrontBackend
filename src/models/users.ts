@@ -1,6 +1,6 @@
 
 //@ts-ignore 
-import client from "../database"
+import pool from "../database"
 import bcrypt from 'bcrypt'
 
 export type User = {
@@ -14,12 +14,12 @@ export class Users {
     async index(): Promise <User[]> {
         try {
             //@ts-ignore
-            const conn = await client.connect()
+            const conn = await pool.connect()
             .then(() => console.log("Connection successful"))
             // @ts-ignore
             .catch((error) => console.log("Connection failed: ", error))
 
-            const sql = 'SHOW * FROM users'
+            const sql = 'SELECT * FROM users'
             
             console.log(conn)
 
@@ -27,7 +27,7 @@ export class Users {
 
             conn.release()
 
-            return result.rows
+            return result
 
         } catch (error) {
             console.log("Could not get users.")

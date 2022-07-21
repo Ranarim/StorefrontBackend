@@ -1,12 +1,12 @@
 import dotenv from "dotenv"
-import {Client} from "pg"
+import {Pool} from "pg"
 
 dotenv.config()
 
 let client
 
 if(process.env.ENV === 'test') {
-    client = new Client ({
+    client = new Pool ({
         host: process.env.POSTGRES_HOST,
         database: process.env.POSTGRES_DB,
         user: process.env.POSTGRES_USER,
@@ -15,7 +15,7 @@ if(process.env.ENV === 'test') {
 }
 
 if (process.env.ENV === 'dev') {
-    client = new Client ({
+    client = new Pool ({
         host: process.env.POSTGRES_HOST,
         database: process.env.POSTGRES_DB,
         user: process.env.POSTGRES_USER,
