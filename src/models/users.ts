@@ -8,7 +8,7 @@ export type User = {
 }
 
 export class Users {
-    async index() {
+    async index()  {
         try {
             const conn = await pool.connect()
             const sql = 'SELECT * FROM users'
