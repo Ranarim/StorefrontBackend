@@ -11,28 +11,19 @@ export type User = {
 }
 
 export class Users {
-    async index() {
+    async index()  {
         try {
-            //@ts-ignore
             const conn = await pool.connect()
-            .then(() => console.log("Connection successful"))
-            // @ts-ignore
-            .catch((error) => console.log("Connection failed: ", error))
-
             const sql = 'SELECT * FROM users'
+
+            const result = conn.query(sql)
             
-            console.log(conn)
-
-            const result = await conn.query(sql)
-
             conn.release()
 
             return result
-
-        } catch (error) {
-            console.log("Could not get users.")
-            throw new Error(`Could not get users. Error: ${error}`)
-        }
+            } catch (err) {
+			console.log(`Error: ${err}`)
+		}
     }
 
     async show(id: string): Promise<User> {
