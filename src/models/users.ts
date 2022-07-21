@@ -11,7 +11,7 @@ export type User = {
 }
 
 export class Users {
-    async index(): Promise <User[]> {
+    async index() {
         try {
             //@ts-ignore
             const conn = await pool.connect()
