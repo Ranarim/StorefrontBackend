@@ -4,15 +4,13 @@
         "host": { "ENV": "POSTGRES_HOST" },
         "user": { "ENV": "POSTGRES_USER" },
         "password": { "ENV": "POSTGRES_PASSWORD" },
-        "database": { "ENV": "POSTGRES_DB" },
-        "port": { "ENV": "POSTGRES_PORT" }
+        "database": { "ENV": "POSTGRES_DB" }
     },
     "test": {
         "driver": "pg",
         "host": { "ENV": "POSTGRES_HOST" },
         "user": { "ENV": "POSTGRES_USER" },
         "password": { "ENV": "POSTGRES_PASSWORD" },
-        "database": { "ENV": "POSTGRES_DB_TEST" },
-        "port": { "ENV": "POSTGRES_PORT" }
+        "database": { "ENV": "POSTGRES_DB_TEST" }
     }
 }

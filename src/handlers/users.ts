@@ -16,9 +16,9 @@ const verifyAuthToken = (req: Request, res: Response) => {
     }
 }
 
-const index = (req: Request, res: Response) => {
+const index = async(req: Request, res: Response) => {
 
-    const users = store.index()
+    const users = await store.index()
     res.json(users)
 }
 
