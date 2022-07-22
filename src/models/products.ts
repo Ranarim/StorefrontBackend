@@ -2,10 +2,9 @@
 import pool from '../database'
 
 export type Product = {
-    id: number, 
+    id?: number, 
     name: string, 
     price: number,
-    category: string,
 }
 
 
@@ -14,13 +13,13 @@ export class Products {
         try {
             //@ts-ignore
             const conn = await pool.connect()
-            const sql = 'SELECT FROM* products'
+            const sql = 'SELECT * FROM products'
 
-            const result = conn.query(sql)
+            const result = await conn.query(sql)
             
             conn.release()
 
-            return result
+            return result.rows
         } catch (error) {
             throw new Error(`Could not get products. Error: ${error}`)
         }
@@ -30,11 +29,14 @@ export class Products {
         try {
             const sql = `SELECT * FROM products WHERE id=($1)`
             //@ts-ignore
-            const conn = client.connect()
-            
-            const result = conn.query(sql,[id])
+            const conn = await pool.connect()
+
+            const result = await conn.query(sql,[id])
+            console.log(id,5)
 
             conn.release()
+
+            console.log(result.rows[0])
 
             return result.rows[0]
         } catch (error) {
@@ -44,18 +46,20 @@ export class Products {
 
     async create(p: Product): Promise<Product> {
         try {
-             const sql = 'INSERT INTO products (id, name, price, category) VALUES ($1, $2, $3, $4) RETURNING *'
+             const sql = 'INSERT INTO products (name, price) VALUES ($1, $2) RETURNING *'
             // @ts-ignore
-             const conn = await client.connect()
+             const conn = await pool.connect()
   
-            const result = await conn.query(sql, [p.id, p.name, p.price, p.category])
+            const result = await pool.query(sql, [p.name, p.price])
   
-            const product:Product = result.rows[0]
+            const product = result.rows[0]
   
             conn.release()
   
             return product
+
         } catch (error) {
+            console.log("Product model not working")
             throw new Error(`Could not add new product. Error: ${error}`)
         }
     }

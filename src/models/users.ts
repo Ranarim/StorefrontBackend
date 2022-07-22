@@ -1,25 +1,26 @@
 
-//@ts-ignore 
 import pool from "../database"
 
 export type User = {
-    id: number, 
+    id?: number, 
     firstname: string, 
     lastname: string, 
+    email: string,
     pw: string,
 }
 
 export class Users {
-    async index()  {
+    async index(): Promise <User[] | undefined>  {
         try {
             const conn = await pool.connect()
+            
             const sql = 'SELECT * FROM users'
 
-            const result = conn.query(sql)
+            const result = await conn.query(sql)
             
             conn.release()
 
-            return result
+            return result.rows
             } catch (err) {
 			console.log(`Error: ${err}`)
 		}
@@ -29,10 +30,7 @@ export class Users {
         try {
             const sql = 'SHOW * FROM users WHERE id=($1)'
             //@ts-ignore
-            const conn = await client.connect()
-            .then(() => console.log("Connection successful"))
-            // @ts-ignore
-            .catch((error) => console.log("Connection failed: ", error))
+            const conn = await pool.connect()
             
             const result = await conn.query(sql, [id])
 
@@ -41,60 +39,48 @@ export class Users {
             return result.rows[0]
 
         } catch (error) {
-            console.log("Could not get user.")
             throw new Error(`Could not get user. Error: ${error}`)
         }
     }
 
     async create(u: User): Promise<User> {
         try {
-            const sql = 'INSERT INTO users (id, firstname, lastname, pw) VALUES ($1, $2, $3, $4) RETURNING *'
+            const sql = 'INSERT INTO users (firstname, lastname, email, pw) VALUES ($1, $2, $3, $4) RETURNING *'
             // @ts-ignore
-            const conn = await client.connect()
-            .then(() => console.log("Connection successful"))
-            // @ts-ignore
-            .catch((error) => console.log("Connection failed: ", error))
+            const conn = await pool.connect()
 
-            console.log(u,conn)
-            
-          /* const salt = await bcrypt.genSalt();
-            const hash = await bcrypt.hash(u.pw, salt); */
-
-            const values = [u.id, u.firstname, u.lastname, u.pw]
+            const values = [u.firstname, u.lastname, u.email, u.pw]
 
             const result = await conn.query(sql, values)
 
-            console.log(result)
-            const user:User = result.rows[0]
+            const user = result.rows[0]
   
             conn.release()
   
             return user
         } catch (error) {
+            console.log("controller did not work")
             throw new Error(`Could not add new user. Error: ${error}`)
         }
     }
 
 
-    /* async authenticate(username: string, password: string): Promise <User | null> {
+/*     async authenticate(email: string, password: string): Promise <User | null> {
         //@ts-ignore
-        const conn = client.connect()
+        const conn = await pool.connect()
 
-        const sql = 'SELECT password_digest FROM users WHERE username=($1)'
+        const sql = 'SELECT password_digest FROM users WHERE id=($1)'
 
-        const result = conn.query(sql, [username])
+        const result = await conn.query(sql, [email])
 
-        if (result.row.length) {
+        if (result.rows.length) {
 
-            const user = result.row[0]
+            const user = result.rows[0]
 
-            console.log(user)
-
-            if (await bcrypt.compare(password, user.password_digest)) {
-                return user
-              }
+            return user
         }
 
         return null
     } */
 }
+
