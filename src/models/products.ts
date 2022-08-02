@@ -6,8 +6,6 @@ export type Product = {
     name: string, 
     price: number,
 }
-
-
 export class Products {
     async index() {
         try {
@@ -16,10 +14,11 @@ export class Products {
             const sql = 'SELECT * FROM products'
 
             const result = await conn.query(sql)
-            
+
             conn.release()
 
             return result.rows
+
         } catch (error) {
             throw new Error(`Could not get products. Error: ${error}`)
         }
@@ -32,15 +31,12 @@ export class Products {
             const conn = await pool.connect()
 
             const result = await conn.query(sql,[id])
-            console.log(id,5)
 
             conn.release()
 
-            console.log(result.rows[0])
-
             return result.rows[0]
         } catch (error) {
-            throw new Error(`Could not find book ${id}. Error: ${error}`)
+            throw new Error(`Could not find product ${id}. Error: ${error}`)
         }
     }
 
@@ -57,7 +53,6 @@ export class Products {
             conn.release()
   
             return product
-
         } catch (error) {
             console.log("Product model not working")
             throw new Error(`Could not add new product. Error: ${error}`)

@@ -9,5 +9,4 @@ CREATE TABLE users (
     );
 
 INSERT INTO users (firstname, lastname, email, pw)
-VALUES
- ('Johannes', 'Maier', 'johannes.maier@gmail.com','geheim');
+VALUES ('Johannes', 'Maier', 'johannes.maier@gmail.com','geheim');

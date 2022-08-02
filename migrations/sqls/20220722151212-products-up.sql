@@ -9,4 +9,5 @@ CREATE TABLE products (
 INSERT INTO products (name, price)
 VALUES
  ('Daunenjacke', 99 );
+ 
 

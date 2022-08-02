@@ -2,6 +2,8 @@ import express, {Response, Request} from "express"
 import {User,Users} from "../models/users"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import { verifyAuthToken } from "../middleware/verifyAuth"
+
 
 require('dotenv').config()
 
@@ -19,7 +21,7 @@ const index = async(req: Request, res: Response): Promise <void> => {
 
 const show = async(req: Request, res: Response): Promise <void> => {
     try {
-        const user = store.show(req.params.id)
+        const user = await store.show(req.params.id)
         res.status(200).json(user)
     } catch(err) {
         res.status(401).json(`Could not get users: ${err}`)
@@ -27,8 +29,7 @@ const show = async(req: Request, res: Response): Promise <void> => {
 }
 
 const create = async(req: Request, res: Response): Promise <void> => {
-  
-
+    
     try {
         const user:User = {
             firstname: <string> req.body.firstname, 
@@ -46,18 +47,18 @@ const create = async(req: Request, res: Response): Promise <void> => {
         const newUser = await store.create(user)
         const token = jwt.sign({user: newUser}, <string> process.env.TOKEN_SECRET)
         res.status(200).json(token) 
+
     } catch (error) {
-        console.log(process.env.BCRYPT_PASSWORD, process.env.SALT_ROUNDS)
         console.log("Handler did not work", error)
-        res.status(400)
-        res.json(error)
+        res.status(401)
+        res.json(`Invalid token ${error}`)
     }
 }
 
 const usersRoutes = (app: express.Application) => {
-    app.get("/users", index)
-    app.get("/users/:id", show)
-    app.post("/users", create)
+    app.get("/users", verifyAuthToken, index)
+    app.get("/users/:id",verifyAuthToken, show)
+    app.post("/users", verifyAuthToken, create)
 }
 
 export default usersRoutes
