@@ -22,5 +22,4 @@ const pool = new Pool({
 
 console.log(NODE_ENV)
 
-
 export default pool

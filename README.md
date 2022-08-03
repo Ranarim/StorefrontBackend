@@ -16,13 +16,11 @@
     GRANT ALL PRIVILEGES ON DATABASE storefront_test TO johannesmaier;
 ```
 
-4. Start the app with `yarn start`
+4. Adjust the environmental variables to your needs with configuring the default .env variables
 
-5. Run all the tests with `yarn test`
-
-## Environment Variables
-
+```
 POSTGRES_HOST = localhost
+EXPRESS_PORT = 3000
 POSTGRES_DB = storefront
 POSTGRES_DB_TEST = storefront_test
 POSTGRES_USER = johannesmaier
@@ -32,3 +30,8 @@ NODE_ENV = dev
 BCRYPT_PASSWORD = sonntagshorn
 SALT_ROUNDS = 10
 TOKEN_SECRET = hochstaufen
+```
+
+5. Start the app with `yarn start`
+
+6. Run all the tests with `yarn test`

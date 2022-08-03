@@ -46,7 +46,14 @@ describe("Order Model", () => {
         expect(quantity).toEqual(3)
         expect(orderid).toEqual(1)
         expect(productid).toEqual(1)
-    }) 
+    })
+
+    it("index method should return an array of orders", async() => {
+      const result = await store.index()
+      expect(result.length).toBeGreaterThan(0)
+    })
+
+
 })
 
 

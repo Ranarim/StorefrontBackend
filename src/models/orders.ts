@@ -43,7 +43,9 @@ export class Orders {
 
             return result.rows
         } catch (error) {
+
             console.log("showOrderByUser did not work")
+
             throw new Error(`Could not find product ${id}. Error: ${error}`)
         }
     }
@@ -76,6 +78,7 @@ export class Orders {
 
         } catch (error) {
             console.log("Order model not working")
+            
             throw new Error(`Could not add new order. Error: ${error}`)
         }
     }

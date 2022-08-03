@@ -3,8 +3,8 @@ import pool from "../database"
 
 export type User = {
     id?: number, 
-    firstname: string, 
-    lastname: string, 
+    firstname?: string, 
+    lastname?: string, 
     email: string,
     pw: string,
 }
@@ -61,6 +61,26 @@ export class Users {
         } catch (error) {
             console.log("controller did not work")
             throw new Error(`Could not add new user. Error: ${error}`)
+        }
+    }
+    
+    async authenticate (userEmail: string) {
+        try {
+            const sql = 'SELECT * FROM users WHERE email=($1)'
+
+            const conn = await pool.connect()
+
+            const result = await conn.query(sql, [userEmail])
+
+            conn.release()
+
+            if (result.rows.length) {
+                const user = result.rows[0]
+                return user
+            }
+            return null
+        } catch(error) {
+            console.log("huhu")
         }
     }
 }

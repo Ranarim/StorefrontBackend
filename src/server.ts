@@ -7,8 +7,8 @@ import ordersRoutes from './handlers/orders'
 import bodyParser from 'body-parser'
 
 const app: express.Application = express()
-const address: string = "127.0.0.1:3000"
-const port = 3000
+const port = process.env.EXPRESS_PORT
+const address: string = `127.0.0.1:${port}`
 
 app.use(bodyParser.json())
 

@@ -5,7 +5,6 @@ import { Server } from 'http'
 let server: Server
 
 describe('Order Handler', () => {
-
 	server = app.listen()
     test("Unauthorized to GET /orders without a token", async() => {
         const result = await request(server).get("/orders")
