@@ -9,8 +9,8 @@ export type Product = {
 export class Products {
     async index() {
         try {
-            //@ts-ignore
             const conn = await pool.connect()
+
             const sql = 'SELECT * FROM products'
 
             const result = await conn.query(sql)
@@ -27,7 +27,7 @@ export class Products {
     async show(id: string): Promise<Product> {
         try {
             const sql = `SELECT * FROM products WHERE id=($1)`
-            //@ts-ignore
+
             const conn = await pool.connect()
 
             const result = await conn.query(sql,[id])
@@ -43,7 +43,7 @@ export class Products {
     async create(p: Product): Promise<Product> {
         try {
              const sql = 'INSERT INTO products (name, price) VALUES ($1, $2) RETURNING *'
-            // @ts-ignore
+
              const conn = await pool.connect()
   
             const result = await pool.query(sql, [p.name, p.price])

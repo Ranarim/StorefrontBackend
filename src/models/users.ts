@@ -46,7 +46,7 @@ export class Users {
     async create(u: User): Promise<User> {
         try {
             const sql = 'INSERT INTO users (firstname, lastname, email, pw) VALUES ($1, $2, $3, $4) RETURNING *'
-            // @ts-ignore
+
             const conn = await pool.connect()
 
             const values = [u.firstname, u.lastname, u.email, u.pw]

@@ -17,7 +17,9 @@ app.get('/', function (req: Request, res: Response) {
 })
 
 usersRoutes(app)
+
 productsRoutes(app)
+
 ordersRoutes(app)
 
 if (process.env.NODE_ENV !== 'test') {
@@ -27,6 +29,3 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 export default app
-
-
-

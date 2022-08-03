@@ -34,7 +34,7 @@ export class Orders {
     async showOrdersByUser(id: string) {
         try {
             const sql = `SELECT * FROM orders WHERE userid=($1)`
-            //@ts-ignore
+
             const conn = await pool.connect()
 
             const result = await conn.query(sql,[id])
