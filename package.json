@@ -9,11 +9,11 @@
         "testEnvironment": "node"
     },
     "scripts": {
-        "start": "ENV=dev tsc && nodemon src/server.js",
+        "start": "ENV=dev && nodemon src/server.ts",
         "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
         "migrate-up": "db-migrate up --config ./database.json",
         "migrate-down": "db-migrate down -c5 --config ./database.json",
-        "test": "ENV=test db-migrate --env test down -c5 && db-migrate --env test up && tsc && jest --forceExit",
+        "test": "ENV=test db-migrate --env test down -c5 && db-migrate --env test up && jest --forceExit",
         "test:watch": "jest --watch",
         "eslint:fix": "eslint --fix",
         "tsc": "tsc"
