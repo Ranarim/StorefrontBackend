@@ -32,6 +32,6 @@ SALT_ROUNDS = 10
 TOKEN_SECRET = hochstaufen
 ```
 
-5. Start the app with `yarn start`
+5. Start app with `yarn start`
 
 6. Run all the tests with `yarn test`
